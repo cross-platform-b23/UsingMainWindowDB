@@ -22,6 +22,7 @@ protected:
     void closeDatabase();
     bool loadPhoneBook();
     bool insertDataToDatabase(const QString &strNim, const QString& strNama, const QString& strEmail);
+    bool deleteDataDatabase(const QString& strNim);
 
 private slots:
     void on_actionNew_triggered();

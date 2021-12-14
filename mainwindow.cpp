@@ -108,6 +108,19 @@ bool MainWindow::insertDataToDatabase(const QString &strNim, const QString &strN
     return fResult;
 }
 
+bool MainWindow::deleteDataDatabase(const QString &strNim)
+{
+    QSqlQuery qry(m_db);
+
+    qry.prepare("DELETE FROM tbdaftarnama WHERE (nim = :nim)");
+    qry.bindValue(":nim", strNim);
+    bool fResult = qry.exec();
+    if (!fResult)
+        qDebug() << "Error deleteDataDatabase: " <<
+                    qry.lastError().text();
+    return fResult;
+}
+
 MainWindow::~MainWindow()
 {
     closeDatabase();
@@ -181,8 +194,11 @@ void MainWindow::on_actionDelete_triggered()
 {
     int nRow = ui->tableWidget->currentRow();
     int nColumn = ui->tableWidget->currentColumn();
-    qDebug("delete row: %d column: %d", nRow, nColumn);
+    QString strNim = ui->tableWidget->item(nRow, 0)->text();
+    qDebug("delete row: %d column: %d, nim: %s", nRow, nColumn,
+           qPrintable(strNim));
     ui->tableWidget->removeRow(nRow);
+    deleteDataDatabase(strNim);
 }
 
 void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
